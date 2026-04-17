@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "chatbot-backend.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "chatbot-backend.js"
+    },
+    {
+      "src": "/health",
+      "dest": "chatbot-backend.js"
+    }
+  ]
+}
+
