@@ -1,0 +1,22 @@
+{
+  "name": "sakthi-portfolio-chatbot",
+  "version": "1.0.0",
+  "description": "AI-powered chatbot for Sakthi's portfolio",
+  "main": "chatbot-backend.js",
+  "scripts": {
+    "start": "node chatbot-backend.js",
+    "dev": "nodemon chatbot-backend.js"
+  },
+  "keywords": ["portfolio", "chatbot", "ai"],
+  "author": "Sakthi",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "node-fetch": "^2.6.11"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
