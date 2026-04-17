@@ -1,15 +1,17 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
+  // Handle preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
+  // Allow only POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -31,10 +33,10 @@ module.exports = async (req, res) => {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01' // ✅ REQUIRED
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307', // ✅ FAST (works on Vercel)
+        model: 'claude-3-haiku-20240307', // fast + works on Vercel
         max_tokens: 200,
         system: "You are Sakthi's AI assistant. Answer questions about her work and experience.",
         messages: [
@@ -48,7 +50,7 @@ module.exports = async (req, res) => {
 
     const data = await response.json();
 
-    // Handle API errors properly
+    // Handle API error
     if (!response.ok) {
       console.error('Claude API error:', data);
       return res.status(response.status).json({
@@ -56,13 +58,15 @@ module.exports = async (req, res) => {
       });
     }
 
-    // Safe extraction
+    // Extract response safely
     const reply = data?.content?.[0]?.text || "No response from AI";
 
     return res.status(200).json({ message: reply });
 
   } catch (error) {
     console.error('Server error:', error);
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({
+      error: error.message
+    });
   }
-};
+}
