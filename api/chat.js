@@ -1,31 +1,3 @@
-import fetch from 'node-fetch';
-
-const portfolioContext = `
-Sakthi is a product manager and builder with 8+ years of professional experience, including 2 years dedicated PM experience. 
-
-Key expertise:
-- Product Strategy & Delivery
-- Product UX & Systems Design
-- Data & Product Insights
-- Workflows & Tools
-
-Recent work includes:
-1. Turned fragmented data into $700K capital recovery at TCCI Manufacturing through data pipeline and Python automation
-2. Digitized 80%+ of operational processes using Power Apps, SharePoint, and Power Automate
-3. Analyzed customer feedback on Amazon Fire TV products to identify and fix critical issues
-4. Won Women in Product Hackathon 2026 with a mentorship matching platform
-5. Designed workflow systems that reduced approval times by 60%
-
-Background:
-- Currently on career break, actively transitioning into AI PM roles
-- Building ClearVoice (AI-powered feedback analyzer for small businesses)
-- Based in Bolingbrook, Illinois
-- Active in Women in Product community
-- Portfolio: https://brammasakthi.com
-
-To contact: Use the form on the portfolio or reach out via LinkedIn (linkedin.com/in/brammasakthi) or email (brammasakthip@gmail.com)
-`;
-
 export default async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -49,15 +21,40 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Message is required' });
     }
 
-    if (!process.env.ANTHROPIC_API_KEY) {
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
       return res.status(500).json({ error: 'API key not configured' });
     }
+
+    const portfolioContext = `Sakthi is a product manager and builder with 8+ years of professional experience, including 2 years dedicated PM experience. 
+
+Key expertise:
+- Product Strategy & Delivery
+- Product UX & Systems Design
+- Data & Product Insights
+- Workflows & Tools
+
+Recent work includes:
+1. Turned fragmented data into $700K capital recovery at TCCI Manufacturing through data pipeline and Python automation
+2. Digitized 80%+ of operational processes using Power Apps, SharePoint, and Power Automate
+3. Analyzed customer feedback on Amazon Fire TV products to identify and fix critical issues
+4. Won Women in Product Hackathon 2026 with a mentorship matching platform
+5. Designed workflow systems that reduced approval times by 60%
+
+Background:
+- Currently on career break, actively transitioning into AI PM roles
+- Building ClearVoice (AI-powered feedback analyzer for small businesses)
+- Based in Bolingbrook, Illinois
+- Active in Women in Product community
+- Portfolio: https://brammasakthi.com
+
+To contact: Use the form on the portfolio or reach out via LinkedIn (linkedin.com/in/brammasakthi) or email (brammasakthip@gmail.com)`;
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'x-api-key': apiKey,
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
@@ -80,6 +77,6 @@ export default async function handler(req, res) {
     res.status(200).json({ message: assistantMessage });
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error: ' + error.message });
   }
 }
