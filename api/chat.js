@@ -33,12 +33,13 @@ export default async function handler(req, res) {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307', // fast + works on Vercel
+        model: 'claude-3-haiku-20240307', // fast model for Vercel
         max_tokens: 200,
-        system: "You are Sakthi's AI assistant. Answer questions about her work and experience.",
+        system: "You are Sakthi's AI assistant. Answer questions about her work and experience clearly and concisely.",
         messages: [
           {
             role: 'user',
@@ -50,7 +51,7 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // Handle API error
+    // Handle Claude API errors
     if (!response.ok) {
       console.error('Claude API error:', data);
       return res.status(response.status).json({
