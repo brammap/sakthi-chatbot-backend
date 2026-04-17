@@ -1,4 +1,6 @@
-export default async function handler(req, res) {
+const fetch = require('node-fetch');
+
+module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -27,7 +29,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 500,
-        system: 'You are Sakthi\'s AI assistant. Answer questions about her work, experience, and how to contact her.',
+        system: 'You are Sakthi\'s AI assistant. Answer questions about her work and experience.',
         messages: [{ role: 'user', content: message }]
       })
     });
@@ -39,4 +41,4 @@ export default async function handler(req, res) {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
